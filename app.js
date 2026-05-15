@@ -267,11 +267,51 @@ function onScanSuccess(decodedText, decodedResult) {
     const urlPattern = /^(https?:\/\/|www\.)[^\s]+$/i;
     if (urlPattern.test(decodedText)) {
         openBtn.classList.remove('hidden');
+        document.getElementById('visual-result').classList.add('hidden');
     } else {
         openBtn.classList.add('hidden');
+        fetchVisualInfo(decodedText);
     }
     
     showToast('QR Scanned Successfully!');
+}
+
+async function fetchVisualInfo(keyword) {
+    const visualDiv = document.getElementById('visual-result');
+    const loadingDiv = document.getElementById('visual-loading');
+    const imgEl = document.getElementById('visual-img');
+    const titleEl = document.getElementById('visual-title');
+    const descEl = document.getElementById('visual-desc');
+
+    visualDiv.classList.add('hidden');
+    loadingDiv.classList.remove('hidden');
+
+    try {
+        // Wikipedia Search API
+        const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&prop=pageimages|extracts&titles=${encodeURIComponent(keyword)}&pithumbsize=500&exintro=1&explaintext=1&origin=*`;
+        
+        const response = await fetch(searchUrl);
+        const data = await response.json();
+        
+        const pages = data.query.pages;
+        const pageId = Object.keys(pages)[0];
+        const page = pages[pageId];
+
+        if (pageId !== "-1" && (page.thumbnail || page.extract)) {
+            imgEl.src = page.thumbnail ? page.thumbnail.source : 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80&w=500';
+            titleEl.textContent = page.title;
+            descEl.textContent = page.extract ? page.extract : "No description available.";
+            
+            loadingDiv.classList.add('hidden');
+            visualDiv.classList.remove('hidden');
+        } else {
+            // Fallback for very specific or unknown terms
+            loadingDiv.classList.add('hidden');
+        }
+    } catch (error) {
+        console.error('Visual Search Error:', error);
+        loadingDiv.classList.add('hidden');
+    }
 }
 
 function onScanFailure(error) {
