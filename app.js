@@ -2,6 +2,10 @@
 let html5QrCode = null;
 let isScanning = false;
 let currentQRData = null;
+let currentWikiData = {
+    title: '',
+    imgUrl: ''
+};
 
 // ============== INIT ==============
 document.addEventListener('DOMContentLoaded', () => {
@@ -298,10 +302,15 @@ async function fetchVisualInfo(keyword) {
         const page = pages[pageId];
 
         if (pageId !== "-1" && (page.thumbnail || page.extract)) {
+            const highRes = page.thumbnail ? page.thumbnail.source.replace(/\d+px-/, '1000px-') : '';
             imgEl.src = page.thumbnail ? page.thumbnail.source : 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80&w=500';
             titleEl.textContent = page.title;
             descEl.textContent = page.extract ? page.extract : "No description available.";
             
+            // Store for actions
+            currentWikiData.title = page.title;
+            currentWikiData.imgUrl = highRes || imgEl.src;
+
             loadingDiv.classList.add('hidden');
             visualDiv.classList.remove('hidden');
         } else {
@@ -311,6 +320,19 @@ async function fetchVisualInfo(keyword) {
     } catch (error) {
         console.error('Visual Search Error:', error);
         loadingDiv.classList.add('hidden');
+    }
+}
+
+function viewHighRes() {
+    if (currentWikiData.imgUrl) {
+        window.open(currentWikiData.imgUrl, '_blank');
+    }
+}
+
+function openWiki() {
+    if (currentWikiData.title) {
+        const url = `https://en.wikipedia.org/wiki/${encodeURIComponent(currentWikiData.title)}`;
+        window.open(url, '_blank');
     }
 }
 

@@ -138,13 +138,20 @@
                 
                 <!-- Visual Search Result -->
                 <div id="visual-result" class="hidden mb-4 animate-fade-in">
-                    <div class="relative rounded-xl overflow-hidden aspect-video bg-gray-900 mb-2 group">
+                    <div class="relative rounded-xl overflow-hidden aspect-video bg-gray-900 mb-2 group cursor-zoom-in" onclick="viewHighRes()">
                         <img id="visual-img" src="" alt="Result" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
                             <p id="visual-title" class="text-white text-xs font-bold"></p>
                         </div>
+                        <div class="absolute top-2 right-2 bg-black/50 backdrop-blur-sm p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                        </div>
                     </div>
                     <p id="visual-desc" class="text-gray-400 text-[11px] leading-relaxed line-clamp-3 mb-3"></p>
+                    <button id="wiki-link" onclick="openWiki()" class="w-full py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-[10px] text-gray-300 font-medium transition flex items-center justify-center gap-2">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.09 4.45c-1.12 0-2.34.24-3.53.59-.44.13-.8.47-1.02.88L3.25 14.1c-.13.25-.13.55 0 .8.13.25.37.42.66.42h1.56c.28 0 .54-.15.68-.4l.84-1.52h6.14l.84 1.52c.14.25.4.4.68.4h1.56c.29 0 .53-.17.66-.42.13-.25.13-.55 0-.8l-4.29-8.18c-.22-.41-.58-.75-1.02-.88-1.19-.35-2.41-.59-3.53-.59zm0 1.63c.69 0 1.4.15 2.11.36l3.3 6.3h-10.82l3.3-6.3c.71-.21 1.42-.36 2.11-.36z"/></svg>
+                        Explore More on Wikipedia
+                    </button>
                 </div>
 
                 <!-- Loading Visual -->
